@@ -21,7 +21,7 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Task Title</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status (Update Here)</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
                                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
@@ -33,15 +33,27 @@
                                         {{ $task->title }}
                                         <div class="text-gray-400 text-xs font-normal">{{ Str::limit($task->description, 50) }}</div>
                                     </td>
+                                    
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                            {{ $task->status === 'Done' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                            {{ $task->status }}
-                                        </span>
+                                        <form action="{{ route('tasks.update', $task->id) }}" method="POST">
+                                            @csrf 
+                                            @method('PATCH')
+                                            
+                                            <select name="status" onchange="this.form.submit()" 
+                                                class="text-xs border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 cursor-pointer 
+                                                {{ $task->status == 'Done' ? 'text-green-700 bg-green-50' : ($task->status == 'In Progress' ? 'text-blue-700 bg-blue-50' : 'text-gray-700') }}">
+                                                
+                                                <option value="Pending" {{ $task->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                                <option value="In Progress" {{ $task->status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+                                                <option value="Done" {{ $task->status == 'Done' ? 'selected' : '' }}>Done</option>
+                                            </select>
+                                        </form>
                                     </td>
+
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('M d, Y') : 'No Date' }}
                                     </td>
+                                    
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <form method="POST" action="{{ route('admin.task.delete', $task->id) }}" onsubmit="return confirm('Are you sure you want to delete this task?');">
                                             @csrf
