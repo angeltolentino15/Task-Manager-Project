@@ -19,6 +19,9 @@
                 <h4 class="font-bold text-lg {{ $task->status == 'Done' ? 'line-through text-gray-400' : 'text-gray-800' }}">
                     {{ $task->title }}
                 </h4>
+                <a href="{{ route('tasks.show', $task->id) }}" class="text-indigo-600 hover:text-indigo-900 text-xs underline">
+                    View Comments / Feedback
+                </a>
                 <div class="flex items-center gap-2 mt-1">
                     <span class="px-2 py-1 text-xs font-semibold rounded-full 
                         {{ $task->status == 'Done' ? 'bg-green-100 text-green-800' : 

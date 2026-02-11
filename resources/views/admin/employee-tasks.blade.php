@@ -31,7 +31,11 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {{ $task->title }}
-                                        <div class="text-gray-400 text-xs font-normal">{{ Str::limit($task->description, 50) }}</div>
+                                        <div class="text-gray-400 text-xs font-normal mb-1">{{ Str::limit($task->description, 50) }}</div>
+                                        
+                                        <a href="{{ route('tasks.show', $task->id) }}" class="text-indigo-600 hover:text-indigo-900 text-xs underline">
+                                            View Details / Comment
+                                        </a>
                                     </td>
                                     
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
