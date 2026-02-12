@@ -39,14 +39,27 @@ public function store(Request $request): RedirectResponse
             'phone_number' => ['required', 'string', 'max:255'],
         ]);
 
-        // 2. Auto-generate the Employee ID
-        // Logic: Get the ID of the last created user and add 1. 
-        // Format: EMP-YYYY-000X (e.g., EMP-2026-0004)
-        $latestUser = User::orderBy('id', 'desc')->first();
-        $nextId = $latestUser ? $latestUser->id + 1 : 1;
+        // ... (Validation code stays the same) ...
+
+        // 2. SMARTER Auto-generate Employee ID
+        // Logic: Find the highest existing employee_id string in the database
+        $latestUser = User::whereNotNull('employee_id')
+                          ->orderBy('employee_id', 'desc')
+                          ->first();
+
+        if ($latestUser) {
+            // Extract the last 4 digits (e.g., from 'EMP-2026-0005', grab '0005')
+            $lastNumber = intval(substr($latestUser->employee_id, -4));
+        } else {
+            // If no employees exist yet, start at 0
+            $lastNumber = 0;
+        }
+
+        // Add 1 to get the new number
+        $nextId = $lastNumber + 1;
         $generatedEmployeeId = 'EMP-' . date('Y') . '-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
 
-        // 3. Create the user in the database
+        // 3. Create the user ... (The rest stays the same)
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,

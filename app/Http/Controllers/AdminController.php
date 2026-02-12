@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Task;
 
 class AdminController extends Controller
 {
@@ -17,5 +18,14 @@ class AdminController extends Controller
     {
         $employee = User::with('tasks')->findOrFail($id);
         return view('admin.employee-tasks', compact('employee'));
+    }
+
+    public function destroy(Task $task)
+    {
+        // Delete the task
+        $task->delete();
+
+        // Refresh the page with a success message
+        return redirect()->back()->with('success', 'Task deleted successfully.');
     }
 }
