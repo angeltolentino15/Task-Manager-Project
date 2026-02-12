@@ -18,16 +18,25 @@ class AdminController extends Controller
         // Calculate counts for the dashboard cards
         $totalEmployees = $employees->count();
         $pendingTasks = Task::where('status', 'Pending')->count();
+        $InProgress = Task::where('status', 'In Progress')->count();      
         $completedTasks = Task::where('status', 'Done')->count();
 
-        return view('admin.dashboard', compact('employees', 'totalEmployees', 'pendingTasks', 'completedTasks'));
+
+        return view('admin.dashboard', compact('employees', 'totalEmployees', 'pendingTasks', 'InProgress', 'completedTasks'));
     }
 
     // 2. VIEW SPECIFIC EMPLOYEE TASKS
     public function showEmployeeTasks($id)
     {
         $employee = User::with('tasks')->findOrFail($id);
-        return view('admin.employee-tasks', compact('employee'));
+
+    // Count how many tasks are marked as "Pending"
+        $pendingCount = $employee->tasks->where('status', 'Pending')->count();
+        
+    // Count In Progress
+        $progressCount = $employee->tasks->where('status', 'In Progress')->count();
+
+        return view('admin.employee-tasks', compact('employee', 'pendingCount', 'progressCount'));
     }
 
     // 3. SHOW CREATE USER FORM
