@@ -1,14 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    public function index() {
+    // 1. DASHBOARD WITH STATISTICS
+    public function index()
+    {
+        // Fetch all employees
         $employees = User::where('role', 'employee')->get();
+        
+        // Calculate counts for the dashboard cards
         $totalEmployees = $employees->count();
         $pendingTasks = Task::where('status', 'Pending')->count();
         $completedTasks = Task::where('status', 'Done')->count();
@@ -16,18 +23,62 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('employees', 'totalEmployees', 'pendingTasks', 'completedTasks'));
     }
 
+    // 2. VIEW SPECIFIC EMPLOYEE TASKS
     public function showEmployeeTasks($id)
     {
         $employee = User::with('tasks')->findOrFail($id);
         return view('admin.employee-tasks', compact('employee'));
     }
 
-    public function destroy(Task $task)
+    // 3. SHOW CREATE USER FORM
+    public function create() 
     {
-        // Delete the task
+        return view('admin.create-user');
+    }
+
+    // 4. STORE NEW USER
+    public function store(Request $request) 
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'department' => 'required',
+            'position' => 'required',
+            'phone_number' => 'required', 
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'department' => $request->department,
+            'position' => $request->position,
+            'phone_number' => $request->phone_number,
+            'password' => Hash::make($request->password),
+            'role' => 'employee', 
+        ]);
+
+        return redirect()->route('admin.dashboard')->with('success', 'User added successfully!');
+    }
+
+    // 5. DELETE USER ACCOUNT
+    public function destroy(User $user)
+    {
+        // Prevent admin from deleting their own account
+        if (auth()->id() === $user->id) {
+            return redirect()->back()->with('error', 'You cannot delete your own account!');
+        }
+
+        $user->delete();
+
+        return redirect()->route('admin.dashboard')->with('success', 'User account deleted successfully.');
+    }
+
+    // 6. DELETE SPECIFIC TASK (Renamed to avoid conflict)
+    public function delete(Task $task)
+    {
         $task->delete();
 
-        // Refresh the page with a success message
         return redirect()->back()->with('success', 'Task deleted successfully.');
     }
 }
