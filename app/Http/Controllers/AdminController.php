@@ -30,10 +30,10 @@ class AdminController extends Controller
     {
         $employee = User::with('tasks')->findOrFail($id);
 
-    // Count how many tasks are marked as "Pending"
+        // Count how many tasks are marked as "Pending"
         $pendingCount = $employee->tasks->where('status', 'Pending')->count();
         
-    // Count In Progress
+        // Count In Progress
         $progressCount = $employee->tasks->where('status', 'In Progress')->count();
 
         return view('admin.employee-tasks', compact('employee', 'pendingCount', 'progressCount'));
@@ -48,6 +48,7 @@ class AdminController extends Controller
     // 4. STORE NEW USER
     public function store(Request $request) 
     {
+        // Validate inputs
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
@@ -57,6 +58,28 @@ class AdminController extends Controller
             'password' => 'required|min:8|confirmed',
         ]);
 
+        // --- EMPLOYEE ID GENERATION LOGIC ---
+        $year = date('Y');
+        
+        // Find the latest employee created this year
+        $latestEmployee = User::where('role', 'employee')
+                              ->where('employee_id', 'like', "EMP-{$year}-%")
+                              ->orderBy('id', 'desc')
+                              ->first();
+
+        if ($latestEmployee && $latestEmployee->employee_id) {
+            // Extract the last 4 digits and add 1
+            $lastNumber = intval(substr($latestEmployee->employee_id, -4));
+            $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+        } else {
+            // First employee of the year
+            $newNumber = '0001';
+        }
+
+        $newEmployeeId = "EMP-{$year}-{$newNumber}";
+        // ------------------------------------
+
+        // Create the user
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -65,9 +88,11 @@ class AdminController extends Controller
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->password),
             'role' => 'employee', 
+            'employee_id' => $newEmployeeId, // Inject the new ID here!
         ]);
 
-        return redirect()->route('admin.dashboard')->with('success', 'User added successfully!');
+        // Redirect with a success message showing the new ID
+        return redirect()->route('admin.dashboard')->with('success', "User added successfully with ID: {$newEmployeeId}!");
     }
 
     // 5. DELETE USER ACCOUNT
