@@ -8,10 +8,34 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
-            <a href="{{ route('admin.dashboard') }}" class="inline-block mb-4 text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
-                &larr; Back to Employee List
-            </a>
+            <div class="flex justify-between items-center mb-6">
+                
+                <a href="{{ route('admin.dashboard') }}" class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition flex items-center">
+                    <span class="mr-2 text-lg">&larr;</span> Back to Employee List
+                </a>
 
+                <div class="flex gap-4">
+                    
+                    <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-3 border-l-4 border-red-400 flex flex-col justify-center min-w-[150px]">
+                        <div class="text-gray-500 dark:text-gray-400 text-[10px] font-bold uppercase tracking-wider">
+                            Pending Tasks
+                        </div>
+                        <div class="text-xl font-extrabold text-red-500 leading-none mt-1">
+                            {{ $pendingCount }} <span class="text-xs font-normal text-gray-600 dark:text-gray-400 ml-1">Waiting</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-3 border-l-4 border-yellow-400 flex flex-col justify-center min-w-[150px]">
+                        <div class="text-gray-500 dark:text-gray-400 text-[10px] font-bold uppercase tracking-wider">
+                            In Progress
+                        </div>
+                        <div class="text-xl font-extrabold text-yellow-500 leading-none mt-1">
+                            {{ $progressCount }} <span class="text-xs font-normal text-gray-600 dark:text-gray-400 ml-1">Active</span>
+                        </div>
+                    </div>
+
+                </div> 
+                </div>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 
                 @if($employee->tasks->isEmpty())

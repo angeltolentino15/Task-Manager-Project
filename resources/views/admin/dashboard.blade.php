@@ -8,18 +8,23 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border-2 border-gray-300 dark:border-gray-700 shadow-md">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-3 border-l-4 border-blue-400 flex flex-col justify-center min-w-[200px]">
                     <p class="text-sm font-black text-gray-500 uppercase">Total Employees</p>
                     <p class="text-3xl font-black text-blue-600">{{ $totalEmployees }} Users</p>
                 </div>
                 
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border-2 border-gray-300 dark:border-gray-700 shadow-md">
-                    <p class="text-sm font-black text-gray-500 uppercase">Pending Tasks</p>
-                    <p class="text-3xl font-black text-yellow-500">{{ $pendingTasks }} Waiting</p>
+                <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-3 border-l-4 border-red-400 flex flex-col justify-center min-w-[200px]">
+                    <p class="text-sm font-black text-gray-500 uppercase">Total Pending Tasks</p>
+                    <p class="text-3xl font-black text-red-500">{{ $pendingTasks }} Waiting</p>
                 </div>
-                
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border-2 border-gray-300 dark:border-gray-700 shadow-md">
+
+                <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-3 border-l-4 border-yellow-400 flex flex-col justify-center min-w-[200px]">
+                    <p class="text-sm font-black text-gray-500 uppercase">In Progress</p>
+                    <p class="text-3xl font-black text-yellow-600">{{ $InProgress }} Active</p>
+                </div>                
+
+                <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-3 border-l-4 border-green-400 flex flex-col justify-center min-w-[200px]">
                     <p class="text-sm font-black text-gray-500 uppercase">Completed</p>
                     <p class="text-3xl font-black text-green-600">{{ $completedTasks }} Done</p>
                 </div>
@@ -29,7 +34,7 @@
                 
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">Employee List</h3>
-                    <a href="{{ route('admin.employee.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 transition">
+                    <a href="{{ route('admin.employee.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 transition">
                         + Create New User
                     </a>
                 </div>
