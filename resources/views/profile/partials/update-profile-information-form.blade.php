@@ -47,6 +47,24 @@
             @endif
         </div>
 
+        <div>
+            <x-input-label for="department" :value="__('Department')" />
+            <x-text-input id="department" name="department" type="text" class="mt-1 block w-full" :value="old('department', $user->department)" required autocomplete="department" />
+            <x-input-error class="mt-2" :messages="$errors->get('department')" />
+        </div>
+
+        <div>
+            <x-input-label for="position" :value="__('Position')" />
+            <x-text-input id="position" name="position" type="text" class="mt-1 block w-full" :value="old('position', $user->position)" required autocomplete="position" />
+            <x-input-error class="mt-2" :messages="$errors->get('position')" />
+        </div>
+
+        <div>
+            <x-input-label for="phone_number" :value="__('Phone Number')" />
+            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full" :value="old('phone_number', $user->phone_number)" required autocomplete="tel" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
+        </div>
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
