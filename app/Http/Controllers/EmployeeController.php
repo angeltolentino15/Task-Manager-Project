@@ -11,7 +11,11 @@ class EmployeeController extends Controller
     // 1. SHOW THE DASHBOARD
     public function index()
     {
-        return view('employee.dashboard');
+        // Fetch only the tasks belonging to the logged-in employee
+        $tasks = Task::where('user_id', auth()->id())->get();
+
+        // Pass the $tasks variable to the view
+        return view('employee.dashboard', compact('tasks'));
     }
 
     // 2. SAVE THE TASK
