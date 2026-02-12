@@ -9,6 +9,10 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
+            <a href="{{ route('employee.dashboard') }}" class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition flex items-center">
+                <span class="mr-2 text-lg">&larr;</span> Back to My Task
+            </a>
+
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">
                     <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100">

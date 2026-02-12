@@ -26,9 +26,7 @@
             <div class="bg-white dark:bg-gray-900 p-6 shadow-xl rounded-xl mb-6 border-2 border-gray-400 dark:border-gray-700">
                 <form action="{{ route('employee.tasks.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row gap-3">
                     @csrf
-                    <input type="file" name="attachment" class="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                    <button type="submit" ...>Add</button>
-                    
+
                     <input 
                         type="text" 
                         name="title" 
