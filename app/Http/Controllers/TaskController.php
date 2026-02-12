@@ -37,4 +37,28 @@ class TaskController extends Controller
         $task->delete();
         return back();
     }
+
+    // Show the Task Details Page
+    public function show(Task $task)
+    {
+        // Ensure employees can't see each other's tasks (Security Check)
+        if (Auth::user()->role !== 'admin' && Auth::user()->id !== $task->user_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        return view('tasks.show', compact('task'));
+    }
+
+    // Save a new Comment
+    public function storeComment(Request $request, Task $task)
+    {
+        $request->validate(['body' => 'required']);
+
+        $task->comments()->create([
+            'body' => $request->body,
+            'user_id' => Auth::id(),
+        ]);
+
+        return back();
+    }
 }
