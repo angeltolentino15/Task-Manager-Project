@@ -59,7 +59,7 @@ public function store(Request $request): RedirectResponse
         $nextId = $lastNumber + 1;
         $generatedEmployeeId = 'EMP-' . date('Y') . '-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
 
-        // 3. Create the user ... (The rest stays the same)
+        // 3. Create the user 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,

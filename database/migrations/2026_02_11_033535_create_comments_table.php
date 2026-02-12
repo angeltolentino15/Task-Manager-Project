@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->text('body');
-            
-            // These are the critical lines missing in your database
             $table->foreignId('task_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             

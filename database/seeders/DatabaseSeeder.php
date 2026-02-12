@@ -21,7 +21,6 @@ public function run(): void
             'name' => 'Main Admin',
             'password' => bcrypt('password'),
             'role' => 'admin',
-            // Add other required fields like department if necessary
             'department' => 'IT', 
             'position' => 'System Administrator',
         ]
