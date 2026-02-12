@@ -115,4 +115,31 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Task deleted successfully.');
     }
+
+    // 7. SHOW THE ASSIGN TASK FORM
+    public function createTask()
+    {
+        // Get only the employees so the admin can pick from a dropdown
+        $employees = User::where('role', 'employee')->get();
+        return view('admin.create-task', compact('employees'));
+    }
+
+    // 8. STORE THE ASSIGNED TASK
+    public function storeTask(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'user_id' => 'required|exists:users,id', // Ensures the selected employee exists
+            'due_date' => 'nullable|date',
+        ]);
+
+        Task::create([
+            'title' => $request->title,
+            'user_id' => $request->user_id, // Assign to the selected employee
+            'due_date' => $request->due_date,
+            'status' => 'Pending', // Default status for new tasks
+        ]);
+
+        return redirect()->route('admin.dashboard')->with('success', 'Task successfully assigned!');
+    }
 }

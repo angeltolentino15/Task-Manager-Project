@@ -44,6 +44,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     
     // Admin Delete Task (Points to the renamed method in AdminController)
     Route::delete('/admin/task/{task}', [AdminController::class, 'destroy'])->name('admin.task.delete');
+
+    // Show the form to assign a task
+    Route::get('/admin/tasks/create', [App\Http\Controllers\AdminController::class, 'createTask'])->name('admin.tasks.create');
+
+       // Save the assigned task to the database
+    Route::post('/admin/tasks', [App\Http\Controllers\AdminController::class, 'storeTask'])->name('admin.tasks.store');
 });
 
 
