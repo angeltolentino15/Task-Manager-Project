@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Task;
 
 class EmployeeController extends Controller
@@ -11,11 +12,17 @@ class EmployeeController extends Controller
     // 1. SHOW THE DASHBOARD
     public function index()
     {
-        // Fetch only the tasks belonging to the logged-in employee
-        $tasks = Task::where('user_id', auth()->id())->get();
+        $userId = Auth::id();
+        
+        // 1. Get tasks for the logged-in employee
+        $tasks = Task::where('user_id', $userId)->orderBy('due_date', 'asc')->get();
 
-        // Pass the $tasks variable to the view
-        return view('employee.dashboard', compact('tasks'));
+        // 2. Count the stats for THIS employee only
+        $pendingCount = Task::where('user_id', $userId)->where('status', 'Pending')->count();
+        $progressCount = Task::where('user_id', $userId)->where('status', 'In Progress')->count();
+
+        // 3. Send all data to the view
+        return view('employee.dashboard', compact('tasks', 'pendingCount', 'progressCount'));
     }
 
     // 2. SAVE THE TASK (Merged & Updated)
