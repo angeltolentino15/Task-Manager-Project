@@ -34,10 +34,15 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     
+    // Manage Employees (New Routes added here)
+    Route::get('/admin/employee/create', [AdminController::class, 'create'])->name('admin.employee.create');
+    Route::post('/admin/employee/store', [AdminController::class, 'store'])->name('admin.employee.store');
+    Route::delete('/admin/employee/{user}', [AdminController::class, 'destroy'])->name('admin.employee.destroy');
+
     // View specific employee tasks
     Route::get('/admin/employee/{id}', [AdminController::class, 'showEmployeeTasks'])->name('admin.employee.tasks');
     
-    // **FIXED:** Admin Delete Route (Points to AdminController now!)
+    // Admin Delete Task (Points to the renamed method in AdminController)
     Route::delete('/admin/task/{task}', [AdminController::class, 'destroy'])->name('admin.task.delete');
 });
 
