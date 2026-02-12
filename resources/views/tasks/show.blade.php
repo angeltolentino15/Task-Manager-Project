@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-300 leading-tight">
             Task Details
         </h2>
     </x-slot>
@@ -8,6 +8,17 @@
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             
+            <div class="mb-6">
+                @if(Auth::user()->role === 'admin')
+                    <a href="{{ route('admin.employee.tasks', $task->user_id) }}" class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                        &larr; Back to Tasks for: <span class="font-bold">{{ $task->user->name }}</span>
+                    </a>
+                @else
+                    <a href="{{ route('employee.dashboard') }}" class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                        &larr; Back to My Tasks
+                    </a>
+                @endif
+            </div>
             <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
                 <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
                     <div>
