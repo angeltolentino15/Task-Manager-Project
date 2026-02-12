@@ -3,8 +3,15 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return response()
@@ -26,24 +33,35 @@ Route::get('/dashboard', function () {
 // --- ADMIN ROUTES ---
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-    // Admin viewing a specific employee's tasks
+    
+    // View specific employee tasks
     Route::get('/admin/employee/{id}', [AdminController::class, 'showEmployeeTasks'])->name('admin.employee.tasks');
-    // Admin deleting a task
-    Route::delete('/admin/task/{id}', [TaskController::class, 'destroy'])->name('admin.task.delete');
+    
+    // **FIXED:** Admin Delete Route (Points to AdminController now!)
+    Route::delete('/admin/task/{task}', [AdminController::class, 'destroy'])->name('admin.task.delete');
 });
 
 
 // --- EMPLOYEE ROUTES ---
+Route::middleware(['auth', 'role:employee'])->group(function () {
+    // Dashboard
+    Route::get('/employee/dashboard', [EmployeeController::class, 'index'])->name('employee.dashboard');
+    
+    // Task Actions
+    Route::post('/employee/tasks', [EmployeeController::class, 'storeTask'])->name('employee.tasks.store');
+});
+
+// --- SHARED TASK ROUTES (For Viewing/Updating/Commenting) ---
+// These are available to any logged-in user (but Policies usually protect them)
 Route::middleware(['auth'])->group(function () {
-    Route::get('/my-dashboard', [TaskController::class, 'index'])->name('employee.dashboard');
-    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
+    Route::post('/tasks/{task}/comments', [TaskController::class, 'storeComment'])->name('comments.store');
+    
+    // Employee Update/Delete (TaskController handles owner checks)
     Route::patch('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
-    // View a single task (Task Details Page)
-    Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
-    // Post a comment
-    Route::post('/tasks/{task}/comments', [TaskController::class, 'storeComment'])->name('comments.store');
 });
+
 
 // --- PROFILE ROUTES ---
 Route::middleware('auth')->group(function () {

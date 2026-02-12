@@ -3,11 +3,29 @@
 
     <div class="py-12"><div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white p-6 shadow-sm rounded-lg mb-6">
-            <form action="{{ route('tasks.store') }}" method="POST" class="flex gap-4">
+            <form action="{{ route('employee.tasks.store') }}" method="POST" class="mt-6 flex gap-2">
                 @csrf
-                <input type="text" name="title" placeholder="New Task..." class="border rounded p-2 w-full" required>
-                <input type="date" name="due_date" class="border rounded p-2">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add</button>
+                
+                <input 
+                    type="text" 
+                    name="title" 
+                    placeholder="New Task..." 
+                    class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                    required
+                >
+
+                <input 
+                    type="date" 
+                    name="due_date" 
+                    class="rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                >
+
+                <button 
+                    type="submit" 
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold transition"
+                >
+                    Add
+                </button>
             </form>
         </div>
 
