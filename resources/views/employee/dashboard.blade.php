@@ -7,7 +7,22 @@
 
     <div class="py-12 bg-gray-200 dark:bg-gray-950 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                    <div class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase">Pending</div>
+                    <div class="text-3xl font-bold text-yellow-500 mt-2">
+                        {{ $pendingCount }} <span class="text-sm text-gray-400">Waiting</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
+                    <div class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase">In Progress</div>
+                    <div class="text-3xl font-bold text-blue-500 mt-2">
+                        {{ $progressCount }} <span class="text-sm text-gray-400">Active</span>
+                    </div>
+                </div>
+            </div>        
             <div class="bg-white dark:bg-gray-900 p-6 shadow-xl rounded-xl mb-6 border-2 border-gray-400 dark:border-gray-700">
                 <form action="{{ route('employee.tasks.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row gap-3">
                     @csrf
