@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers; // <--- This was missing!
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,24 +18,33 @@ class EmployeeController extends Controller
         return view('employee.dashboard', compact('tasks'));
     }
 
-    // 2. SAVE THE TASK
+    // 2. SAVE THE TASK (Merged & Updated)
     public function storeTask(Request $request)
     {
-        // Validate the input
+        // Combined validation: Added file rules and string constraints
         $request->validate([
             'title' => 'required|string|max:255',
             'due_date' => 'nullable|date',
+            'attachment' => 'nullable|file|mimes:jpg,png,pdf,docx|max:2048',
         ]);
 
-        // Create the task in the database
-        Task::create([
-            'user_id' => auth()->id(), // Assigns it to the logged-in employee
-            'title' => $request->title,
-            'due_date' => $request->due_date,
-            'status' => 'pending',
-        ]);
+        // Initialize the Task object
+        $task = new Task();
+        $task->user_id = auth()->id();
+        $task->title = $request->title;
+        $task->due_date = $request->due_date;
+        $task->status = 'pending'; // Keeps the default status from your 2nd snippet
 
-        // Refresh the page with a success message
+        // Handle File Upload if an attachment exists
+        if ($request->hasFile('attachment')) {
+            // Stores in storage/app/public/attachments
+            $path = $request->file('attachment')->store('attachments', 'public');
+            $task->attachment = $path;
+        }
+
+        $task->save();
+
+        // Return with a success message
         return redirect()->back()->with('success', 'Task added successfully!');
     }
 }
