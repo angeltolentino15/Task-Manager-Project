@@ -38,34 +38,53 @@
             
             {{-- Add New Task Form Section --}}
             <div class="bg-white dark:bg-gray-900 p-6 shadow-xl rounded-xl mb-6 border-2 border-gray-400 dark:border-gray-700">
-                {{-- Task creation form with file upload support --}}
-                <form action="{{ route('employee.tasks.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row gap-3">
-                    {{-- CSRF token for security --}}
+                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4">Add New Task</h3>
+                
+                {{-- Task creation form --}}
+                <form action="{{ route('employee.tasks.store') }}" method="POST" class="space-y-4">
                     @csrf
 
-                    {{-- Task title input field --}}
-                    <input 
-                        type="text" 
-                        name="title" 
-                        placeholder="New Task..." 
-                        class="w-full rounded-lg border-gray-400 dark:border-gray-600 dark:bg-black dark:text-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-inner"
-                        required
-                    >
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        {{-- Task title input field --}}
+                        <div class="flex-1">
+                            <input 
+                                type="text" 
+                                name="title" 
+                                placeholder="Task Title..." 
+                                class="w-full rounded-lg border-gray-400 dark:border-gray-600 dark:bg-black dark:text-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-inner"
+                                required
+                            >
+                        </div>
 
-                    {{-- Due date input field --}}
-                    <input 
-                        type="date" 
-                        name="due_date" 
-                        class="rounded-lg border-gray-400 dark:border-gray-600 dark:bg-black dark:text-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-inner"
-                    >
+                        {{-- Due date input field (FIXED FOR DARK MODE) --}}
+                        <div class="w-full sm:w-auto">
+                            <input 
+                                type="date" 
+                                name="due_date" 
+                                class="w-full rounded-lg border-gray-400 dark:border-gray-600 dark:bg-black dark:text-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-inner [color-scheme:light] dark:[color-scheme:dark]"
+                            >
+                        </div>
+                    </div>
 
-                    {{-- Submit button with hover and active effects --}}
-                    <button 
-                        type="submit" 
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-lg font-bold shadow-lg transition transform active:scale-95"
-                    >
-                        Add
-                    </button>
+                    {{-- Description Field --}}
+                    <div>
+                        <textarea 
+                            name="description" 
+                            placeholder="Task Description (Optional)..." 
+                            rows="2"
+                            class="w-full rounded-lg border-gray-400 dark:border-gray-600 dark:bg-black dark:text-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-inner"
+                        ></textarea>
+                    </div>
+
+                    {{-- Submit button --}}
+                    <div class="flex justify-end">
+                        <button 
+                            type="submit" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-lg font-bold shadow-lg transition transform active:scale-95"
+                        >
+                            Add Task
+                        </button>
+                    </div>
                 </form>
             </div>
 
