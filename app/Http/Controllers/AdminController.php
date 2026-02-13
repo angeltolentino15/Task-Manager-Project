@@ -129,12 +129,14 @@ class AdminController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'user_id' => 'required|exists:users,id', // Ensures the selected employee exists
             'due_date' => 'nullable|date',
         ]);
 
         Task::create([
             'title' => $request->title,
+            'description' => $request->description,
             'user_id' => $request->user_id, // Assign to the selected employee
             'due_date' => $request->due_date,
             'status' => 'Pending', // Default status for new tasks

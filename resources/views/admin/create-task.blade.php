@@ -55,8 +55,23 @@
 
                         <!-- Input field for task title/description -->
                         <div class="space-y-1">
-                            <label class="text-xs font-black uppercase text-gray-500 ml-1">Task Title / Description</label>
+                            <label class="text-xs font-black uppercase text-gray-500 ml-1">Task Title</label>
+                            
+                            <p class="text-xs text-gray-400 mb-1">
+                                Be specific (e.g., "Fix Login Bug" instead of "Fix Code").
+                            </p>
+
                             <input type="text" name="title" placeholder="What needs to be done?" class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-lg shadow-sm dark:bg-black dark:text-gray-300 focus:border-violet-500 focus:ring-violet-500 h-12" required>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-xs font-black uppercase text-gray-500 ml-1">Task Description / Details</label>
+                            
+                            <p class="text-xs text-gray-400 mb-1">
+                                Provide step-by-step instructions, links, or extra details for the employee.
+                            </p>
+
+                            <textarea name="description" rows="5" placeholder="Type the task details here..." class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-lg shadow-sm dark:bg-black dark:text-gray-300 focus:border-violet-500 focus:ring-violet-500 p-3"></textarea>
                         </div>
 
                         <!-- Input field for due date of the task -->

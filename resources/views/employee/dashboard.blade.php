@@ -1,32 +1,49 @@
+{{-- Main application layout wrapper --}}
 <x-app-layout>
+    {{-- Header slot with page title --}}
     <x-slot name="header">
+        {{-- Page title for My Tasks --}}
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('My Tasks') }}
         </h2>
     </x-slot>
 
+    {{-- Main content area with background and minimum height --}}
     <div class="py-12 bg-gray-200 dark:bg-gray-950 min-h-screen">
+        {{-- Centered container with max width --}}
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            {{-- Statistics Cards Grid - 2 column layout --}}
             <div class="grid grid-cols-2 gap-4 mb-6">
                 
+                {{-- Pending Tasks Card - Yellow themed --}}
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                    {{-- Card label --}}
                     <div class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase">Pending</div>
+                    {{-- Pending count display --}}
                     <div class="text-3xl font-bold text-yellow-500 mt-2">
                         {{ $pendingCount }} <span class="text-sm text-gray-400">Waiting</span>
                     </div>
                 </div>
                 
+                {{-- In Progress Tasks Card - Blue themed --}}
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
+                    {{-- Card label --}}
                     <div class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase">In Progress</div>
+                    {{-- In progress count display --}}
                     <div class="text-3xl font-bold text-blue-500 mt-2">
                         {{ $progressCount }} <span class="text-sm text-gray-400">Active</span>
                     </div>
                 </div>
-            </div>        
+            </div>
+            
+            {{-- Add New Task Form Section --}}
             <div class="bg-white dark:bg-gray-900 p-6 shadow-xl rounded-xl mb-6 border-2 border-gray-400 dark:border-gray-700">
+                {{-- Task creation form with file upload support --}}
                 <form action="{{ route('employee.tasks.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row gap-3">
+                    {{-- CSRF token for security --}}
                     @csrf
 
+                    {{-- Task title input field --}}
                     <input 
                         type="text" 
                         name="title" 
@@ -35,12 +52,14 @@
                         required
                     >
 
+                    {{-- Due date input field --}}
                     <input 
                         type="date" 
                         name="due_date" 
                         class="rounded-lg border-gray-400 dark:border-gray-600 dark:bg-black dark:text-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-inner"
                     >
 
+                    {{-- Submit button with hover and active effects --}}
                     <button 
                         type="submit" 
                         class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-lg font-bold shadow-lg transition transform active:scale-95"
@@ -50,49 +69,73 @@
                 </form>
             </div>
 
+            {{-- Tasks List Section --}}
             <div class="bg-white dark:bg-gray-900 p-6 shadow-xl rounded-xl mb-6 border-2 border-gray-400 dark:border-gray-700">
+                {{-- Empty State - Shown when no tasks exist --}}
                 @if($tasks->isEmpty())
                     <p class="text-gray-500 dark:text-gray-400 text-center py-6 italic">No tasks found. Add your first task above!</p>
                 @else
+                    {{-- Loop through each task --}}
                     @foreach($tasks as $task)
+                        {{-- Task item container with hover effect --}}
                         <div class="flex justify-between items-center border-b border-gray-300 dark:border-gray-800 py-5 last:border-0 hover:bg-gray-100 dark:hover:bg-gray-800 transition px-3 -mx-3 rounded-lg">
                             
+                            {{-- Task Information Section --}}
                             <div class="flex-1">
+                                {{-- Task title with strikethrough if completed --}}
                                 <h4 class="font-extrabold text-lg {{ $task->status == 'Done' ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-100' }}">
                                     {{ $task->title }}
                                 </h4>
                                 
+                                {{-- View comments/feedback link --}}
                                 <a href="{{ route('tasks.show', $task->id) }}" class="text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-200 text-xs font-bold underline">
                                     View Comments / Feedback
                                 </a>
 
+                                {{-- Status badge and due date container --}}
                                 <div class="flex items-center gap-2 mt-2">
+                                    {{-- Status badge with dynamic color based on status --}}
                                     <span class="px-3 py-1 text-xs font-black uppercase tracking-wider rounded-full shadow-sm
                                         {{ $task->status == 'Done' ? 'bg-green-200 text-green-900 dark:bg-green-900/60 dark:text-green-300' : 
                                           ($task->status == 'In Progress' ? 'bg-blue-200 text-blue-900 dark:bg-blue-900/60 dark:text-blue-300' : 'bg-gray-300 text-gray-800 dark:bg-gray-700 dark:text-gray-300') }}">
                                         {{ $task->status }}
                                     </span>
+                                    {{-- Due date badge --}}
                                     <span class="text-xs font-bold text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-950 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-800">
                                         Due: {{ $task->due_date ?? 'No Date' }}
                                     </span>
                                 </div>
                             </div>
 
+                            {{-- Action Buttons Section --}}
                             <div class="flex items-center gap-4">
+                                {{-- Status update form with auto-submit --}}
                                 <form action="{{ route('tasks.update', $task->id) }}" method="POST">
+                                    {{-- CSRF token for security --}}
                                     @csrf 
+                                    {{-- HTTP PATCH method --}}
                                     @method('PATCH')
+                                    {{-- Status dropdown - Auto-submits on change --}}
                                     <select name="status" onchange="this.form.submit()" 
                                         class="text-sm font-bold border-gray-400 dark:border-gray-600 dark:bg-black dark:text-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                                        {{-- Pending option --}}
                                         <option value="Pending" {{ $task->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                        {{-- In Progress option --}}
                                         <option value="In Progress" {{ $task->status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+                                        {{-- Done option --}}
                                         <option value="Done" {{ $task->status == 'Done' ? 'selected' : '' }}>Done</option>
                                     </select>
                                 </form>
 
+                                {{-- Delete task form with confirmation dialog --}}
                                 <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('Delete this task?');">
-                                    @csrf @method('DELETE')
+                                    {{-- CSRF token for security --}}
+                                    @csrf 
+                                    {{-- HTTP DELETE method --}}
+                                    @method('DELETE')
+                                    {{-- Delete button with trash icon --}}
                                     <button class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-transform active:scale-90">
+                                        {{-- Trash bin SVG icon --}}
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
                                           <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                         </svg>
